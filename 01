@@ -1,0 +1,55 @@
+
+import streamlit as st
+
+st.set_page_config(
+    page_title="Calcolatore spazio di arresto",
+    page_icon="🚗",
+    layout="centered"
+)
+
+st.title("Calcolatore dello spazio di arresto")
+st.write("Calcola lo spazio di reazione, frenata e arresto.")
+
+# Input dell'utente
+velocita = st.slider(
+    "Velocità (km/h)",
+    min_value=10,
+    max_value=200,
+    value=130
+)
+
+tempo_reazione = st.slider(
+    "Tempo di reazione (secondi)",
+    min_value=0.5,
+    max_value=3.0,
+    value=1.5,
+    step=0.1
+)
+
+decelerazione = st.slider(
+    "Decelerazione (m/s²)",
+    min_value=1.0,
+    max_value=12.0,
+    value=7.0,
+    step=0.5
+)
+
+# Conversione della velocità da km/h a m/s
+velocita_ms = velocita / 3.6
+
+# Calcolo degli spazi
+spazio_reazione = velocita_ms * tempo_reazione
+spazio_frenata = velocita_ms**2 / (2 * decelerazione)
+spazio_totale = spazio_reazione + spazio_frenata
+
+# Visualizzazione dei risultati
+st.subheader("Risultati")
+
+st.metric("Spazio di arresto", f"{spazio_totale:.2f} m")
+st.write(f"Spazio di reazione: **{spazio_reazione:.2f} m**")
+st.write(f"Spazio di frenata: **{spazio_frenata:.2f} m**")
+
+st.caption(
+    "Modello semplificato: decelerazione costante, "
+    "senza considerare pendenza, aderenza variabile o ritardi meccanici."
+)
